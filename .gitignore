@@ -1,0 +1,12 @@
+env/
+env
+__pycache__/*
+__pycache__
+text/
+text
+Flicker8k_Dataset/*
+Flicker8k_Dataset
+descriptions.text
+models/
+models/*
+*.pkl
