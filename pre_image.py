@@ -1,4 +1,5 @@
 from keras.applications.vgg16 import VGG16, preprocess_input
+from keras.applications.inception_v3 import InceptionV3, preprocess_input
 from keras.models import Model
 from os import listdir
 from keras.preprocessing.image import load_img, img_to_array
@@ -6,13 +7,14 @@ import numpy as np
 from pickle import dump
 
 def extract_features(directory):
-    model = VGG16()
+    model = InceptionV3()
     model = Model(inputs=model.inputs, outputs=model.layers[-2].output)
     
     features = dict()
     for name in listdir(directory):
         filename = directory + '/' + name
         # VGG16 expects 224x224 images
+        # InceptionV3 expects 299x299 images.
         image = load_img(filename, target_size=(224, 224))
         image = img_to_array(image)
         # Reshape the image array to fit the model input
@@ -38,4 +40,4 @@ if __name__=='__main__':
     directory = 'Flicker8k_Dataset'
     features = extract_features(directory)
     print(f'Extracted Features: {len(features)}')
-    dump(features, open('features.pkl', 'wb'))
+    dump(features, open('vgg16features.pkl', 'wb'))

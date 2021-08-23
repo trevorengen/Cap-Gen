@@ -52,7 +52,7 @@ if __name__=='__main__':
     train_descriptions = load_clean_descriptions('descriptions.txt', train)
     print(f'Descriptions: {len(train_descriptions)}')
 
-    train_features = load_photo_features('features.pkl', train)
+    train_features = load_photo_features('vgg16features.pkl', train)
     print(f'Photos: {len(train_features)}')
 
     tokenizer = create_tokenizer(train_descriptions)
@@ -72,13 +72,14 @@ if __name__=='__main__':
     test_descriptions = load_clean_descriptions('descriptions.txt', test)
     print(f'Descriptions: test={len(test_descriptions)}')
 
-    test_features = load_photo_features('features.pkl', test)
+    test_features = load_photo_features('vgg16features.pkl', test)
     print(f'Photos: test={len(test_features)}')
 
     X1test, X2test, ytest = create_sequences(tokenizer, max_length, test_descriptions, test_features, vocab_size)
 
     # Fit model
     model = define_model(vocab_size, max_length)
-    filepath = 'model-ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5'
+    filepath = 'model-ep6{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5'
     checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
-    model.fit([X1train, X2train], ytrain, epochs=20, verbose=1, callbacks=[checkpoint], validation_data=([X1test, X2test], ytest))
+    # IF RUNNING VGG16 LOWER EPOCHS IT IS MUCH SLOWER THAN INCEPTIONV3
+    model.fit([X1train, X2train], ytrain, epochs=10, verbose=1, callbacks=[checkpoint], validation_data=([X1test, X2test], ytest))

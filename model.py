@@ -9,6 +9,7 @@ from keras.callbacks import ModelCheckpoint
 # then combines the two models into one and finally outputs
 # in the final Dense layer.
 def define_model(vocab_size, max_length):
+    # Input shape of 4096 for VGG16 || 2048 for InceptionV3
     inputs1 = Input(shape=(4096,))
     fe1 = Dropout(0.5)(inputs1)
     fe2 = Dense(256, activation='relu')(fe1)
